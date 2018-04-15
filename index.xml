@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hellebusch.io</title>
+    <link>http://hellebusch.io/</link>
+    <description>Recent content on hellebusch.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 08 Apr 2018 18:04:54 -0700</lastBuildDate>
+    
+	<atom:link href="http://hellebusch.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>http://hellebusch.io/about/</link>
+      <pubDate>Sun, 08 Apr 2018 18:04:54 -0700</pubDate>
+      
+      <guid>http://hellebusch.io/about/</guid>
+      <description>Welcome to hellebusch.io! I&amp;rsquo;m Sean, a software engineer, avid backpacker, novice photographer, improv cook, and disc golf enthusiast. I grew up in Saint Louis, Missouri and attended college at Truman State University. After migrating to Kansas City for work, and meeting my wonderful partner, Kelly, we picked up our things and headed to the Pacific Northwest. Portland is where we call home now; where the beards grow long, the beer flows hazy, and the trees are ever green.</description>
+    </item>
+    
+  </channel>
+</rss>
