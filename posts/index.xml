@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>hellebusch.io</title>
-    <link>https://hellebusch.io/</link>
-    <description>Recent content on hellebusch.io</description>
+    <title>Posts on hellebusch.io</title>
+    <link>https://hellebusch.io/posts/</link>
+    <description>Recent content in Posts on hellebusch.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 21 Apr 2018 15:53:52 -0700</lastBuildDate>
     
-	<atom:link href="https://hellebusch.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://hellebusch.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>https://hellebusch.io/posts/first-post/</guid>
       <description>My First Post! If I&amp;rsquo;ve learned anything from my first few years as a developer, it&amp;rsquo;s that I can retain half as much of the information as I&amp;rsquo;d like, and I know less than half of what I need to know in order to be the engineer that I want to be. It&amp;rsquo;s the small things that matter in life, and I like to think that applies to software engineering as well.</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://hellebusch.io/about/</link>
-      <pubDate>Sat, 21 Apr 2018 09:31:46 -0700</pubDate>
-      
-      <guid>https://hellebusch.io/about/</guid>
-      <description>I’m Sean, a software engineer, avid backpacker, novice photographer, improv cook, and disc golf enthusiast. I grew up in Saint Louis, Missouri and attended college at Truman State University. After migrating to Kansas City for work, and meeting my wonderful partner, Kelly, we picked up our things and headed to the Pacific Northwest. Portland is where we call home now; where the beards grow long, the beer flows hazy, and the trees are ever green.</description>
     </item>
     
   </channel>
