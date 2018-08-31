@@ -6,17 +6,17 @@
     <description>Recent content in Posts on hellebusch.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 Apr 2018 15:53:52 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://hellebusch.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>First Post</title>
-      <link>https://hellebusch.io/posts/first-post/</link>
-      <pubDate>Sat, 21 Apr 2018 15:53:52 -0700</pubDate>
+      <title>my-first-post</title>
+      <link>https://hellebusch.io/posts/my-first-post/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://hellebusch.io/posts/first-post/</guid>
+      <guid>https://hellebusch.io/posts/my-first-post/</guid>
       <description>My First Post! If I&amp;rsquo;ve learned anything from my first few years as a developer, it&amp;rsquo;s that I can retain half as much of the information as I&amp;rsquo;d like, and I know less than half of what I need to know in order to be the engineer that I want to be. It&amp;rsquo;s the small things that matter in life, and I like to think that applies to software engineering as well.</description>
     </item>
     
