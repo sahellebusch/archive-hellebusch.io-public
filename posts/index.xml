@@ -6,10 +6,19 @@
     <description>Recent content in Posts on hellebusch.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 31 Aug 2018 11:22:24 -0700</lastBuildDate>
     
 	<atom:link href="https://hellebusch.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Opinion: Passing Variables Is Better Than Proxy Injection</title>
+      <link>https://hellebusch.io/posts/opinion-variable-passing-over-proxy/</link>
+      <pubDate>Fri, 31 Aug 2018 11:22:24 -0700</pubDate>
+      
+      <guid>https://hellebusch.io/posts/opinion-variable-passing-over-proxy/</guid>
+      <description>Opinion: Passing Variables Is Better Than Proxy Injection The Issue A common issue I&amp;rsquo;ve experienced while developing Node servers is how to best inject mocks for tests. Libraries like proxyquire override the require function and act as a pass-through proxy. This is achieved by overriding the require function and using a custom loader based on the injected module paths. Seems straightforward enough, but I&amp;rsquo;ve seen complicated examples with nested injections that invalidate the module cache from suite to suite, thus resulting in false positives.</description>
+    </item>
     
     <item>
       <title>my-first-post</title>

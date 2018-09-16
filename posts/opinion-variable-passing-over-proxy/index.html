@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Sean Hellebusch">
+    <meta name="description" content="Ramblings of a developer who enjoys his work.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <base href="https://hellebusch.io">
+    <title>
+  Opinion: Passing Variables Is Better Than Proxy Injection · hellebusch.io
+</title>
+
+    <link rel="canonical" href="https://hellebusch.io/posts/opinion-variable-passing-over-proxy/">
+
+    <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700">
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="https://hellebusch.io/css/style.min.css">
+
+    <link rel="icon" type="image/png" href="https://hellebusch.io/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://hellebusch.io/images/favicon-16x16.png" sizes="16x16">
+
+    
+
+    <meta name="generator" content="Hugo 0.46" />
+  </head>
+
+  <body>
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://hellebusch.io/">
+      hellebusch.io
+    </a>
+    
+    <ul class="navigation-list float-right">
+      
+      <li class="navigation-item">
+        <a class="navigation-link" href="/posts/">Blog</a>
+      </li>
+      
+      <li class="navigation-item">
+        <a class="navigation-link" href="/about/">About</a>
+      </li>
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+  <article>
+    <header>
+      <h1 class="title">Opinion: Passing Variables Is Better Than Proxy Injection</h1>
+      <h2 class="date">August 31, 2018</h2>
+    </header>
+
+    
+
+<h1 id="opinion-passing-variables-is-better-than-proxy-injection">Opinion: Passing Variables Is Better Than Proxy Injection</h1>
+
+<h2 id="the-issue">The Issue</h2>
+
+<p>A common issue I&rsquo;ve experienced while developing Node servers is how to best inject mocks for tests. Libraries like <a href="https://www.npmjs.com/package/proxyquire">proxyquire</a> override the <code>require</code> function and act as a pass-through proxy. This is achieved by overriding the <code>require</code> function and using a custom loader based on the injected module paths. Seems straightforward enough, but I&rsquo;ve seen complicated examples with nested injections that invalidate the module cache from suite to suite, thus resulting in false positives. I&rsquo;ll admit I&rsquo;m guilty of critizing the approach I&rsquo;ll demonstrate in a moment, but that was until I debugged integration tests for a couple hours only to find out that a function called <code>isNumber</code> was being mocked out in a gross test suite that was injecting stubs three levels deep. I spent <em>a couple of hours</em> looking for something that shouldn&rsquo;t have been done in the first place. Previously, I would have just rolled my eyes at the developer, but that solves nothing. Rather, I reassessed my opinions and ultimately changed the way I look at Node servers.</p>
+
+<h2 id="passing-dependencies-from-top-down">Passing Dependencies From Top Down</h2>
+
+<p>I used to really dislike passing variables from the top down like this. I thought it was too verbose and would be a maintenence nightmare, but in the end it has made development easier because <em>tests became easier to write</em>. Instead of adding yet another dependency for testing, we can simply change the way we initialize applications by passing in common, application level dependencies at the entrypoint. To best understand what I mean, let&rsquo;s see what I believe an idiomatic express Node server ought to look like in code.</p>
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<p>If you&rsquo;d rather skip the below, you can go straight to the repo where I&rsquo;ve stored this example <a href="https://github.com/sahellebusch/examples/tree/master/idiomatic-express-server">here</a>.</p>
+
+<h3 id="server-js">server.js</h3>
+
+<p>This is the entrypoint for our server. It&rsquo;s here that we will initiate any top-level dependencies to be consumed throughout the application. In this example, I have a configuration and a logger objects.</p>
+
+<pre><code class="language-javascript">'use strict';
+
+const config = require('config');
+const initApp = require('./server/app');
+const logger = require('./lib/logger');
+
+const port = config.port || 3000;
+let server = initApp({ config, logger }).listen(port, () =&gt; {
+  let { address, port } = server.address();
+  logger.info(`Server listening at ${address}:${port}`);
+});
+
+const shutdown = signal =&gt; () =&gt; {
+  logger.info(`${signal} received, shutting down the server.`);
+  server.close();
+};
+
+// listen for TERM signal .e.g. kill
+process.on('SIGTERM', shutdown('SIGTERM'));
+
+// listen for INT signal e.g. Ctrl-C
+process.on('SIGINT', shutdown('SIGINT'));
+</code></pre>
+
+<h3 id="server-init-app-js">server/init-app.js</h3>
+
+<p>By using a function to initialize, we can continue to pass those dependencies mentioned above to any routers.</p>
+
+<pre><code class="language-javascript">'use strict';
+
+const express = require('express');
+const initStatusRouter = require('./route/status');
+
+const initApp = ({ config, logger }) =&gt; {
+  logger.info('Initializing server...');
+  const app = express();
+  app.use('/status', initStatusRouter({ config, logger }));
+  return app;
+};
+
+module.exports = initApp;
+</code></pre>
+
+<h3 id="server-route-status-js">server/route/status.js</h3>
+
+<p>This is the simplest router that all servers should contain.</p>
+
+<pre><code class="language-javascript">'use strict';
+
+const express = require('express');
+const initStatusRouter = require('./route/status');
+
+const initApp = ({ config, logger }) =&gt; {
+  logger.info('Initializing server...');
+  const app = express();
+  app.use('/status', initStatusRouter({ config, logger }));
+  return app;
+};
+
+module.exports = initApp;
+</code></pre>
+
+<h2 id="testing">Testing</h2>
+
+<p>Now that we have the server setup and ready to go, we can see what testing using <a href="https://www.npmjs.com/package/supertest">supertest</a> looks like. Now that we have a function to start out server, we can easily pass our own stubs into the initialization function. This makes dependency injection much simpler. It doesn&rsquo;t require any special modules to inject code code and is a more correct representation of how our code would be executed.</p>
+
+<h3 id="test-server-init-app-js">test/server/init-app.js</h3>
+
+<pre><code class="language-javascript">'use strict';
+
+const config = require('config');
+const supertest = require('supertest');
+const sinon = require('sinon');
+const initApp = require('../../server/init-app');
+
+const loggerStub = {
+  info: sinon.stub(),
+  error: sinon.stub()
+};
+
+describe('the app', () =&gt; {
+  let app = null;
+
+  before(() =&gt; {
+    app = initApp({ config, logger: loggerStub });
+  });
+
+  it('returns a healthy status upon request', () =&gt;
+    supertest(app)
+      .get('/status')
+      .expect(200, { status: 'ok' })
+      .then(() =&gt; {
+        sinon.assert.callCount(loggerStub.info, 2);
+        sinon.assert.notCalled(loggerStub.error);
+        sinon.assert.calledWith(loggerStub.info, 'Initializing server...');
+        sinon.assert.calledWith(loggerStub.info, sinon.match('Status Check:'));
+      }));
+});
+
+</code></pre>
+
+<h3 id="cheers">Cheers! 🍻</h3>
+
+<p>Thanks for reading, hope you enjoyed it. Comments or questions, feel free to email me at sahellebusch at gmail dot com.</p>
+
+  </article>
+</section>
+
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    © 2018 · Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+  </section>
+</footer>
+
+    </main>
+
+    
+
+  </body>
+
+</html>
